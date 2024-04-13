@@ -23,7 +23,7 @@ hue: 250                         # The hue of the theme color (e.g. red: 0, oran
 
 # Personal info
 avatar:                             # Path to the avatar image relative to /source
-author: Your Name
+author: Sio
 subtitle: This is the subtitle
 links:
   - name: Twitter
