@@ -1,9 +1,9 @@
 ---
 title: Java Security 3 - công cụ Gadget Inspector (not done)
 date: 2024-04-12 17:18:07
-tags: Java Security
+tags: [Java Security, Security]
 categories:
-  - Java
+  - Javascript 
 ---
 
 # Kiến thức nền

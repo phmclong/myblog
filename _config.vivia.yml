@@ -24,17 +24,15 @@ hue: 250                         # The hue of the theme color (e.g. red: 0, oran
 # Personal info
 avatar:                             # Path to the avatar image relative to /source
 author: Sio
-subtitle: This is the subtitle
+subtitle: Hồng nhan dễ kiếm, tri kỷ khó tìm
 links:
-  - name: Twitter
-    icon: fa-brands fa-twitter      # Find icon codes at https://fontawesome.com/search
-    url: https://twitter.com
-  - name: Steam
-    icon: fa-brands fa-steam
-    url: https://store.steampowered.com
+  # Find icon codes at https://fontawesome.com/search
+  # - name: Twitter
+  #   icon: fa-brands fa-twitter      
+  #   url: https://twitter.com
   - name: GitHub
     icon: fa-brands fa-github
-    url: https://github.com
+    url: https://github.com/phmclong
 
 # Sidebar
 sidebar:
