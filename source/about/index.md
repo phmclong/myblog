@@ -9,4 +9,4 @@ I enjoy web development and have a passion for cybersecurity. I particularly rel
 
 I try to blog about my technology research.
 
-In my spare time, I really like playing sports (Badminton), and playing ranked video games (LoL).
+In my spare time, I really like playing sports (Badminton), and playing video games (LoL).
