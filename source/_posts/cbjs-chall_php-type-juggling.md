@@ -1,7 +1,7 @@
 ---
 title: CBJS Challenge - PHP TYPE JUGGLING (Write up)
 date: 2022-03-27 02:21:02
-tags: [PHP Security, Security]
+tags: [PHP Security, Security, CTF, PHP Type Juggling]
 categories:
   - PHP 
 ---
@@ -18,13 +18,13 @@ URL của challenge: http://css.kid.cyberjutsu-lab.tech:9000/type\_juggling\_ina
 
 Sau khi truy cập link ta thấy:
 
-![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1648323052366/AP8szTGqT.png align="left")
+{% asset_img 1.png %}
 
 _Ảnh 0_
 
 Ấn vào button source, ta được chuyển tới page sau, URL của page là: http://css.kid.cyberjutsu-lab.tech:9000/type\_juggling\_inarray.php?debug
 
-![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1648323217540/bXCOEQefB.png align="left")
+{% asset_img 2.png %}
 
 _Ảnh 1_
 
@@ -90,7 +90,7 @@ if(isset($_GET['debug'])) die(highlight_file(__FILE__));
 
 Dòng này có 1 khối if mà trong đó có hàm **isset()** và tham số truyền vào là biến debug, biến debug được truyền vào từ URL, cụ thể nó ở sau dấu ? trên URL. Mình sẽ dùng hình sau để cho dễ mình họa:
 
-![URL.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1649015277301/0newuf9PA.png align="left")
+{% asset_img 3.png %}
 
 _Ảnh 2_
 
@@ -134,7 +134,7 @@ if (in_array($param1, $whitelist_numbers) && in_array($param2, $whitelist_number
 
 Để đến được hàm eval() thì như ta thấy có 1 khối điều kiện **if**, do có các toán tử && xuất hiện 2 lần nên ta đoán được 3 toán hạng kia phải trả về **true**. Vậy làm sao để 3 toán hạng đều trả về **true**. Mình bắt đầu google về hàm **in_array**, chi tiết mình xem ở đây: https://www.php.net/manual/en/function.in-array.php
 
-![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1648324382629/uUC_mUR_6.png align="left")
+{% asset_img 4.png %}
 
 _Ảnh 3_
 
@@ -153,11 +153,11 @@ for($x = 0; $x <= chiều dài mảng từ tham số thứ 2; $x+=1) {
 
 Bài này được xây dựng dựa trên 1 hành vi của ngôn ngữ PHP, đó là PHP TYPE JUGGLING. CyberJutsu có 2 slide nói về điều này.
 
-![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1648324879504/lwtEDH588.png align="left")
+{% asset_img 5.png %}
 
 _Ảnh 4_
 
-![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1648324888566/GRKTne5gK.png align="left")
+{% asset_img 6.png %}
 
 _Ảnh 5_
 
@@ -198,7 +198,7 @@ $operator = "*";
 
 Vậy cuối cùng payload sẽ là **p1=1&p2=1%20.%20system(%27ls+-la%27)&op=**\*. Sau khi gửi thì server trả về đoạn code HTML trông như sau (mình dùng Burp Suite để tiện cho việc hiển thị code HTML, bạn nào thích thì có thể tìm hiểu thêm tại: https://portswigger.net/burp)
 
-![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1648333138420/ftgSnWnRM.png align="left")
+{% asset_img 7.png %}
 
 _Ảnh 6_
 
@@ -206,25 +206,25 @@ _Ảnh 6_
 
 Mình thấy có 3 file là _md5_password_compare.php_, _style.css_, _type_juggling_inarray.php_. Bỏ qua file _type_juggling_inarray.php_ vì nó là file mà bạn đã được xem source ngay trên web. Mình sẽ dùng lệnh **cat md5_password_compare.php** và tương tự **cat style.css** để xem trong nội dung của 2 file kia có chứa flag không. Đổi lệnh thì chỉ cần đổi phần bên trong hàm **system()** rồi encode lại theo tài liệu bên trên là được. Kết quả không như mong đợi, file _md5_password_compare.php_ thì trả về:
 
-![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1648332948965/R7P9ghnI6.png align="left")
+{% asset_img 8.png %}
 
 _Ảnh 7_
 
 Còn file _style.css_ trả về:
 
-![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1648333046038/cmHn4jNLI.png align="left")
+{% asset_img 9.png %}
 
 _Ảnh 8_
 
 Nói chung là 2 file này không có chứa flag, tuy nhiên nhớ lại _Ảnh 6_ thì mình biết không còn cái directory nào nằm ngang hàng file _type_juggling_inarray.php_. Mình thử xem các directory và file nằm ở thư mục root của hệ điều hành Linux bằng câu lệnh **ls / -la**, kết quả trả về:
 
-![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1648333932880/_eOtTivgm.png align="left")
+{% asset_img 10.png %}
 
 _Ảnh 9_
 
 Trông có vẻ khả quan khi mình thấy có 1 file tên _DAY_LA_CAI_FLAG_CHUC_MUNG_BAN_. Xem nội dung file này bằng lệnh **cat /DAY_LA_CAI_FLAG_CHUC_MUNG_BAN**, kết quả trả về:
 
-![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1648334177636/YDzkmSC1f.png align="left")
+{% asset_img 11.png %}
 
 _Ảnh 10_
 
@@ -256,7 +256,7 @@ $exec = "1<script>alert(document.domain)</script> / 1";
 
 Từ payload trên bạn có thể tưởng tượng đoạn script của JS có thể được thực thi ngay tại trình duyệt. Đây là kết quả của nó, mình cho phép hiển thị ra pop-up in ra domain của trang web này:
 
-![XSS.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1648899285109/h5ScxzaCa.png align="left")
+{% asset_img 12.png %}
 
 _Ảnh 11_
 

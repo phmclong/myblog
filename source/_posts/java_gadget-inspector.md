@@ -1,9 +1,9 @@
 ---
 title: Java Security 3 - công cụ Gadget Inspector (not done)
-date: 2024-04-12 17:18:07
-tags: [Java Security, Security]
+date: 2023-10-2 17:18:07
+tags: [Java Security, Security, Java Insecure Deserialization, Static Analysis]
 categories:
-  - Javascript 
+  - Java 
 ---
 
 # Kiến thức nền
@@ -84,7 +84,7 @@ Do có kiểu **serialization** khác nhau nên ta cần triển khai (implement
 
 Trong 3 thư mục: **src\\main\\java\\gadgetinspector\\jackson**, **src\\main\\java\\gadgetinspector\\javaserial**, **src\\main\\java\\gadgetinspector\\xstream** tác giả đã implement các `SerializableDecider`, `ImplementationFinder` và `SourceDiscovery` dành riêng cho từng hình thức serialization.
 
-![](https://cdn.hashnode.com/res/hashnode/image/upload/v1698965810701/765b4e95-ed1e-43d4-b91d-ee2fb6b0e9e6.jpeg align="center")
+{% asset_img 1.jpeg %}
 
 Sử dụng Jackson làm ví dụ để phân tích. Xem file **src\\main\\java\\gadgetinspector\\jackson\\JacksonSerializableDecider.java** để thấy `SerializableDecider` dành cho kiểu serialization trong thư viện Jackson.
 
@@ -1153,7 +1153,7 @@ DAG phải thỏa mãn các điều kiện sau:
 - Mỗi đỉnh xuất hiện và chỉ xuất hiện một lần
 - Nếu A đứng trước B trong dãy thì không có đường đi từ B đến A như trên hình.
 
-![](https://cdn.hashnode.com/res/hashnode/image/upload/v1698965832271/00a0b5c4-eef9-441e-8a83-11199f704c08.jpeg align="center")
+{% asset_img 2.jpeg %}
 
 Đồ thị như vậy là đồ thị topo có thứ tự. Cấu trúc tree thực sự có thể được chuyển thành phân loại topo, trong khi phân loại topo không nhất thiết phải chuyển thành cây.
 
@@ -1225,7 +1225,7 @@ Vì **return value** của `childMethod()` có liên quan đến param `carg` n�
 
 Như bạn có thể thấy trong hình bên dưới, cấu trúc dữ liệu của `outgoingReferences`trong method `topologicallySortMethodCalls()` là:
 
-![](https://cdn.hashnode.com/res/hashnode/image/upload/v1698965737920/e53a5e2b-0d5c-41f1-a0b4-66d84d5500d9.jpeg align="center")
+{% asset_img 3.jpeg %}
 
 Nhưng ở trên đã nói rằng topology không thể tạo thành một vòng khi sắp xếp mà phải có một vòng trong chuỗi method call.
 
