@@ -1,19 +1,17 @@
 ---
-title: CBJS Challenge - PHP TYPE JUGGLING (Write up)
+title: CBJS Challenge - FILE UPLOAD WORKSHOP 📁 (Write up)
 date: 2022-05-14 02:21:02
 tags: [PHP Security, Security, CTF, File Upload Vulnerability]
 categories:
-  - PHP 
+  - PHP
 ---
 
 Thử thách lần này là về lỗ hổng File Upload, được xây dựng bởi team CyberJutsu, nó bao gồm tất cả 9 levels mà theo mình thấy thì được sắp xếp từ dễ cho đến khó, ban đầu thì đơn giản nhưng càng về sau thì bạn càng phải xâu chuỗi những kiến thức mà bạn có được thì mới giải được nó.
 
 Để nắm được sơ qua khái niệm về lỗ hổng File Upload thì team CyberJutsu đã làm 2 video giới thiệu về lỗ hổng này:
 
-* Video 1: https://www.youtube.com/watch?v=ttj7\_uL4xPA
-    
-* Video 2: https://www.youtube.com/watch?v=OLp10F6DLR4
-    
+- Video 1: https://www.youtube.com/watch?v=ttj7\_uL4xPA
+- Video 2: https://www.youtube.com/watch?v=OLp10F6DLR4
 
 Không lan man nữa, ta đi đến link của thử thách: http://file-workshop.cyberjutsu-lab.tech:6001/
 
@@ -95,7 +93,7 @@ Tiếp tục làm như thử thách 1 mình làm, kết quả trả về:
 
 Flag nằm trong file **1ad7e7cd851-secret.txt**
 
-> Flag thử thách 2: CBJS{wr0nGlY\_ImplEm3nt}
+> Flag thử thách 2: CBJS{wr0nGlY_ImplEm3nt}
 
 Thử thách 2 cũng có thể giải giống thử thách 3 (cách giải bên dưới).
 
@@ -123,7 +121,7 @@ Tiến hành làm như các bài trước, ta thấy:
 
 Flag nằm trong file **1ad7e7cd851-secret.txt**
 
-> Flag thử thách 3: CBJS{bl4ck\_list?}
+> Flag thử thách 3: CBJS{bl4ck_list?}
 
 # Thử thách 4 (Đề bài: RCE)
 
@@ -131,9 +129,9 @@ Có thể thấy thử thách 4 đã thay đổi cách filter:
 
 {% asset_img 15.png %}
 
-Dòng 4, filter nốt 2 đuôi **.phar** và **.phtml** bằng cách sử dụng hàm **in\_array()**.
+Dòng 4, filter nốt 2 đuôi **.phar** và **.phtml** bằng cách sử dụng hàm **in_array()**.
 
-Hàm **in\_array()** nhận 2 tham số (tham số 1 là giá trị của một phần tử, tham số 2 là một mảng), hàm này sẽ duyệt xem giá trị của phần tử kia có nằm trong mảng kia ko.
+Hàm **in_array()** nhận 2 tham số (tham số 1 là giá trị của một phần tử, tham số 2 là một mảng), hàm này sẽ duyệt xem giá trị của phần tử kia có nằm trong mảng kia ko.
 
 Vậy thì nếu **$extension** có giá trị nằm trong 3 đuôi \["php", "phtml", "phar"\] thì đều bị chặn.
 
@@ -151,12 +149,9 @@ Nằm bên trong tag Directory là các đoạn cấu hình mà mình tạm gọ
 
 Chú ý đến đoạn **AllowOverride All**, đoạn này có nghĩa là ta có thể sử dụng file **.htaccess** nằm trong thư mục **/var/www** để ghi đè cấu hình của Apache.
 
-* Về **Directory**: https://httpd.apache.org/docs/2.4/en/mod/core.html#directory
-    
-* Về **.htaccess**: https://httpd.apache.org/docs/2.2/en/howto/htaccess.html
-    
-* Về **AllowOverride**: https://httpd.apache.org/docs/2.4/fr/mod/core.html#allowoverride
-    
+- Về **Directory**: https://httpd.apache.org/docs/2.4/en/mod/core.html#directory
+- Về **.htaccess**: https://httpd.apache.org/docs/2.2/en/howto/htaccess.html
+- Về **AllowOverride**: https://httpd.apache.org/docs/2.4/fr/mod/core.html#allowoverride
 
 Bạn có nhớ tại video 2 của CBJS thì để thực thi được các file **.php** mỗi khi có request tới thì apache phải sử dụng module **libapache2-mod-php**.
 
@@ -168,10 +163,8 @@ Bạn có nhớ tại video 2 của CBJS thì để thực thi được các fil
 
 Có nghĩa là bạn có thể cho phép 1 đuôi bất kì như **.abc** được ánh xạ như 1 file **php** bình thường.
 
-* Về **LoadModule**: https://httpd.apache.org/docs/2.4/fr/mod/mod\_so.html#loadmodule
-    
-* Về **AddType**: https://httpd.apache.org/docs/2.4/fr/mod/mod\_mime.html#addtype
-    
+- Về **LoadModule**: https://httpd.apache.org/docs/2.4/fr/mod/mod\_so.html#loadmodule
+- Về **AddType**: https://httpd.apache.org/docs/2.4/fr/mod/mod\_mime.html#addtype
 
 Ta biết: **.htaccess** cho phép ghi đè apache config, **AddType** chỉ định apache sẽ thực thi các file **.php**.
 
@@ -221,7 +214,7 @@ Thành công gửi file **hack.abc**, mình truy cập theo đường dẫn tớ
 
 Flag nằm trong file **fead248f338-secret.txt**:
 
-> Flag thử thách 4: CBJS{so\_magic\_I\_wondeR\_what\_about\_other\_system?}
+> Flag thử thách 4: CBJS{so_magic_I_wondeR_what_about_other_system?}
 
 # Thử thách 5 (Đề bài: RCE)
 
@@ -231,7 +224,7 @@ Tiếp tục thay đổi cách filter:
 
 Bài 5 ko cho ta xem file cấu hình apache nữa, nếu như bài 4 ta có thể bypass bằng cách lợi dụng tệp **.htaccess** để gửi lên 1 file tuy có đuôi khác nhưng MIMETYPE của nó vẫn có thể được thực thi như 1 file php.
 
-Ở bài này lọc luôn MIMETYPE bằng hàm **in\_array()**, lúc này nếu như MIMETYPE không nằm trong 3 giá trị \["image/jpeg", "image/png", "image/gif"\] thì sẽ bị phát hiện hack.
+Ở bài này lọc luôn MIMETYPE bằng hàm **in_array()**, lúc này nếu như MIMETYPE không nằm trong 3 giá trị \["image/jpeg", "image/png", "image/gif"\] thì sẽ bị phát hiện hack.
 
 Mình thấy bài này bypass còn dễ hơn bài trước, mình vẫn sẽ gửi 1 file **hack.php** nhưng mình sẽ đổi MIMETYPE của nó thành 1 trong 3 giá trị bên trên. Trông request nó sẽ như này:
 
@@ -247,25 +240,25 @@ Dòng 17 mình sửa **Content-Type** thành **image/png**. Ấn gửi request v
 
 Flag nằm trong file **fead248f338-secret.txt**:
 
-> Flag thử thách 5: CBJS{why\_you\_check\_with\_useR\_input}
+> Flag thử thách 5: CBJS{why_you_check_with_useR_input}
 
 # Thử thách 6 (Đề bài: RCE)
 
-Lúc vào thử thách 6, bạn có thể thấy dòng chữ *I checked the wrong way, I've just fixed it, hope I dont have bug anymore* không?
+Lúc vào thử thách 6, bạn có thể thấy dòng chữ _I checked the wrong way, I've just fixed it, hope I dont have bug anymore_ không?
 
 Liệu bài này đã check đúng cách chưa, cùng xem đoạn code đã được thay đổi:
 
 {% asset_img 31.png %}
 
-Dòng 1, hàm **finfo\_open()** với tham số **FILEINFO\_MIME\_TYPE** để lấy ra **magic\_database**.
+Dòng 1, hàm **finfo_open()** với tham số **FILEINFO_MIME_TYPE** để lấy ra **magic_database**.
 
 > MIME hay Multi-purpose Internet Mail Extensions. MIMETYPE tạo thành một cách tiêu chuẩn để phân loại các loại tệp trên Internet. Các chương trình Internet như máy chủ Web và trình duyệt đều có danh sách các MIMETYPE để chúng có thể chuyển các tệp cùng loại theo cùng một cách, bất kể chúng đang làm việc trong hệ điều hành nào.
 
-Dòng 2, hàm **finfo\_file()** được dùng để kiểm tra **MIMETYPE** của file vừa được upload. Việc kiểm tra này được thực hiện bằng cách so sánh **file signature (hay còn gọi là chữ ký đầu tệp** của file vừa được upload với **file signature** nằm trong **magic\_database**.
+Dòng 2, hàm **finfo_file()** được dùng để kiểm tra **MIMETYPE** của file vừa được upload. Việc kiểm tra này được thực hiện bằng cách so sánh **file signature (hay còn gọi là chữ ký đầu tệp** của file vừa được upload với **file signature** nằm trong **magic_database**.
 
 Dòng 3 và 4, ta thấy chỉ có 3 dạng MIMETYPE được chấp nhận là "image/jpeg", "image/png", "image/gif".
 
-Hàm **finfo\_file()** chỉ check MIMETYPE bằng các ký tự đầu tệp, cho nên các ký tự phía sau sẽ không được check. Từ đó ta có thể thêm code của mình đằng sau để bypass cơ chế check này.
+Hàm **finfo_file()** chỉ check MIMETYPE bằng các ký tự đầu tệp, cho nên các ký tự phía sau sẽ không được check. Từ đó ta có thể thêm code của mình đằng sau để bypass cơ chế check này.
 
 Mình dùng tool **Exiftool** để tạo ra 1 file có ký tự đầu tệp giống các file **.jpg** nhưng các ký tự sau chứa code của mình.
 
@@ -287,11 +280,11 @@ Flag nằm trong file **414ed63690-secret.txt**:
 
 {% asset_img 36.png %}
 
-> Flag thử thách 6: CBJS{ch3ck\_mag1c\_bite\_iz\_tragic}
+> Flag thử thách 6: CBJS{ch3ck_mag1c_bite_iz_tragic}
 
 # Thử thách 7 (Đề bài: RCE)
 
-Truy cập vào thư thách 7, ta thấy dòng chữ *CHANGELOG: From this challenge onwards, we have configured apache securely, you can read the config if you like:*. Có vẻ như bài này cấu hình apache đã an toàn.
+Truy cập vào thư thách 7, ta thấy dòng chữ _CHANGELOG: From this challenge onwards, we have configured apache securely, you can read the config if you like:_. Có vẻ như bài này cấu hình apache đã an toàn.
 
 ## Đoạn này mình giải thích vì sao cấu hình apache ở bài này an toàn. Bạn nào ko thích đọc thì kéo thẳng xuống đoạn hack
 
@@ -354,7 +347,7 @@ $newFile = $dir . "/" . $_FILES["file"]["name"];
 move_uploaded_file($_FILES["file"]["tmp_name"], $newFile);
 ```
 
-Đoạn "thư mục upload file 1" ra ngay trên mô tả cách mà file mới được lưu, lúc này nó sẽ được lưu vào thư mục **/usr/upload/tên\_session\_id/tên\_file**.
+Đoạn "thư mục upload file 1" ra ngay trên mô tả cách mà file mới được lưu, lúc này nó sẽ được lưu vào thư mục **/usr/upload/tên_session_id/tên_file**.
 
 Tạm gọi đây là đoạn code mang tên "thư mục upload file 2"
 
@@ -363,7 +356,7 @@ $user_dir = substr($dir, 5);
 $success = 'Successfully uploaded and unzip files into ' . $user_dir . '/' . $_FILES["file"]["name"];
 ```
 
-Đoạn "thư mục upload file 2" này nhằm mục đích in ra cho người dùng thông báo về nơi lưu trữ file đã được upload. Bạn thấy như mình giải thích thì file được upload sẽ được lưu vào **/usr/upload/tên\_session\_id/tên\_file**, tuy nhiên trong file **000-default.conf** có ghi:
+Đoạn "thư mục upload file 2" này nhằm mục đích in ra cho người dùng thông báo về nơi lưu trữ file đã được upload. Bạn thấy như mình giải thích thì file được upload sẽ được lưu vào **/usr/upload/tên_session_id/tên_file**, tuy nhiên trong file **000-default.conf** có ghi:
 
 ```plaintext
 # CHANGELOG: if request to /upload/* then serve /usr/upload/*
@@ -372,9 +365,9 @@ Alias "/upload/" "/usr/upload/"
 
 nghĩa là toàn bộ các request tới **/upload** sẽ lấy ra các file trong thư mục **/usr/upload** để đưa lên cho bạn xem.
 
-Vậy nên thông dòng thông báo ở "thư mục upload file 2" sử dụng hàm **substr()** nhằm cắt phần **/usr/** đi và in ra thông báo nơi chứa thư mục là bắt nguồn từ **/upload/tên\_session\_id/tên\_file**.
+Vậy nên thông dòng thông báo ở "thư mục upload file 2" sử dụng hàm **substr()** nhằm cắt phần **/usr/** đi và in ra thông báo nơi chứa thư mục là bắt nguồn từ **/upload/tên_session_id/tên_file**.
 
-Tuy nhiên file thật vẫn năm trong **/usr/upload/tên\_session\_id/tên\_file**.
+Tuy nhiên file thật vẫn năm trong **/usr/upload/tên_session_id/tên_file**.
 
 Chỗ mình giải thích kia chỉ là phần mở rộng để bạn hiểu thêm về code đang làm gì.
 
@@ -420,9 +413,9 @@ AllowOverride None
 
 {% asset_img 39.png %}
 
-Dòng 26 là nơi mà một **unsafe method** là hàm **shell\_exec()** được gọi.
+Dòng 26 là nơi mà một **unsafe method** là hàm **shell_exec()** được gọi.
 
-Tham số mà hàm **shell\_exec()** nhận lại đến từ một **untrusted data** là biến **$cmd**. Truy về nguồn gốc tạo nên biến **$cmd** ta thấy nó tạo từ biến **$newFile** ở dòng 21, tại đây biến **$\_FILES\["file"\]\["name"\]** chính là **user input** hay một **unstrusted data**
+Tham số mà hàm **shell_exec()** nhận lại đến từ một **untrusted data** là biến **$cmd**. Truy về nguồn gốc tạo nên biến **$cmd** ta thấy nó tạo từ biến **$newFile** ở dòng 21, tại đây biến **$\_FILES\["file"\]\["name"\]** chính là **user input** hay một **unstrusted data**
 
 Mình sẽ truyền giá trị **;sleep 5;** cho biến **$\_FILES\["file"\]\["name"\]** để test 5 giây sau server có trả về response không.
 
@@ -436,7 +429,7 @@ Nói qua 1 một chút về đoạn payload thì mình sử dụng dấu **;** �
 
 Vì thư mục mà mình gửi request tới là **/var/www/html** nên mình sử dụng lệnh **cd ..** 3 lần để trở về thư mục root, sau đó dùng lệnh **ls - la** để hiển thị các file và directory.
 
-Dòng 26, kết quả chạy của hàm **shell\_exec()** được lưu vào biến **$debug**.
+Dòng 26, kết quả chạy của hàm **shell_exec()** được lưu vào biến **$debug**.
 
 Dòng 81, **echo** cho phép in ra kết quả của biến **$debug**.
 
@@ -448,7 +441,7 @@ Ta thấy response trả về là toàn bộ file và directory của thư mục
 
 {% asset_img 43.png %}
 
-> Flag thử thách 7: CBJS{w0w\_s0\_buggy\_filename}
+> Flag thử thách 7: CBJS{w0w_s0_buggy_filename}
 
 # Thử thách 8 (Đề bài: đọc file /etc/passwd)
 
@@ -472,7 +465,7 @@ Thành công evaluates được file **/etc/passwd**
 
 Việc đọc được file vừa xong được gọi là **Local File Inclusion** - 1 loại attack mà hacker đánh lừa ứng dụng web để có thể đọc và thực thi một file bất kì trên hệ thống.
 
-> Flag thử thách 8: CBJS{baby\_LFI}
+> Flag thử thách 8: CBJS{baby_LFI}
 
 # Thử thách 9 (Đề bài: RCE)
 
@@ -494,7 +487,7 @@ Từ cái flag ta có thể thấy tác giả đã gợi ý về việc kết h�
 
 {% asset_img 47.png %}
 
-Đoạn code này cho ta biết file của chúng ta luôn được lưu tại **/usr/upload/tên\_session/** và với cái tên cố định là **avatar.jpg**. Giả sử **tên\_session** của mình là **sheon** thì nó luôn được lưu tại **/usr/upload/sheon/avatar.jpg**
+Đoạn code này cho ta biết file của chúng ta luôn được lưu tại **/usr/upload/tên_session/** và với cái tên cố định là **avatar.jpg**. Giả sử **tên_session** của mình là **sheon** thì nó luôn được lưu tại **/usr/upload/sheon/avatar.jpg**
 
 {% asset_img 48.png %}
 
