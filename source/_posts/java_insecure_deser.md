@@ -47,9 +47,9 @@ Khi data được **deserialize** là data do người dùng có thể kiểm so
 
 * là công cụ được công bố trong bài trình bày **Marshalling Pickles** bởi **Chris Frohoff** và **Gabe Lawrence** tại hội thảo AppSecCali 2015.
     
-* Video bài trình bày **Marshalling Pickles**: \[https://www.youtube.com/watch?v=KSA7vUkXGSg\](file:///C:/Users/ADMIN/AppData/Local/Temp/msohtmlclip1/01/clip\_filelist.xml)
+* Video bài trình bày **Marshalling Pickles**: \[https://www.youtube.com/watch?v=KSA7vUkXGSg\]
     
-* Slide của bài trình bày **Marshalling Pickles**: \[https://www.slideshare.net/frohoff1/appseccali-2015-marshalling-pickles\](file:///C:/Users/ADMIN/AppData/Local/Temp/msohtmlclip1/01/clip\_filelist.xml).
+* Slide của bài trình bày **Marshalling Pickles**: \[https://www.slideshare.net/frohoff1/appseccali-2015-marshalling-pickles\]
     
 * là 1 tool mã nguồn mở trên github, đây là link github của nó: [https://github.com/frohoff/ysoserial](https://github.com/frohoff/ysoserial).
     
