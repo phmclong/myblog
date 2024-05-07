@@ -1,6 +1,6 @@
 ---
 title: Java Security 3 - công cụ Gadget Inspector (not done)
-date: 2023-10-2 17:18:07
+date: 2023-11-02 7:18:07
 tags: [Java Security, Security, Java Insecure Deserialization, Static Analysis]
 categories:
   - Java 
