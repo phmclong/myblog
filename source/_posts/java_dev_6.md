@@ -49,15 +49,15 @@ Mọi class đều là con của class **Object**, hay có thể nói class **Ob
 
 {% asset_img 2.png %}
 
-**Class** là class được cung cấp bởi package `java.lang.Class`.
+**Class<T>** là class được cung cấp bởi package `java.lang.Class`.
 
-Một instance của class **Class** đại diện cho toàn bộ các kiểu dữ liệu trong Java, bao gồm: các kiểu dữ liệu cơ bản (boolean, byte, char, short, int, long), void, array, class, interface, enumeration, annotation.
+Một instance của class **Class<T>** đại diện cho toàn bộ các kiểu dữ liệu trong Java, bao gồm: các kiểu dữ liệu cơ bản (boolean, byte, char, short, int, long), void, array, class, interface, enumeration, annotation.
 
-**Class** không có **public constructor**. Thay vào đó object của **Class** được tạo ra tự động bởi JVM trong quả trình tải class.
+**Class<T>** không có **public constructor**. Thay vào đó object của **Class<T>** được tạo ra tự động bởi JVM trong quả trình tải class.
 
 # Cách sử dụng Reflection API
 
-Do các thao tác của Reflection API đều nằm trên object của class **Class** nên trước tiên ta cần lấy ra được object **Class** trước.
+Do các thao tác của Reflection API đều nằm trên object của class **Class<T>** nên trước tiên ta cần lấy ra được object **Class<T>** trước.
 
 ## Các cách lấy ra object **Class**
 
