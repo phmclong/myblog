@@ -1,5 +1,5 @@
 ---
-title: Java Dev 8 - Java Bytecode (ASM Framework)
+title: Java Security - Java Bytecode (ASM Framework)
 date: 2023-11-02 2:18:07
 tags: [Java Development, Development]
 categories:

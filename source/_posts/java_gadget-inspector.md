@@ -1,12 +1,12 @@
 ---
-title: Java Security 3 - công cụ Gadget Inspector (not done)
+title: Java Security - công cụ Gadget Inspector (not done)
 date: 2023-11-02 19:18:07
 tags: [Java Security, Security, Java Insecure Deserialization, Static Analysis]
 categories:
   - Java 
 ---
 
-# Kiến thức nền
+# I. Kiến thức nền
 
 Về thuật ngữ **source** và **sink**:
 
@@ -359,6 +359,7 @@ if (!Files.exists(Paths.get("classes.dat")) || !Files.exists(Paths.get("methods.
 
 Có thể thấy ở trên, khối `if` kiểm tra xem liệu 3 file **classes.dat**, **methods.dat**, **inheritanceMap.dat** có tồn tại không ? Nếu không tồn tại thì tạo ra 1 instance `MethodDiscovery` ở và gọi tới method `discover()` của instance này.
 
+### `MethodDiscovery()`
 Tới **src\\main\\java\\gadgetinspector\\MethodDiscovery.java** để xem cách method `MethodDiscovery.discover()` được triển khai.
 
 ```java
@@ -389,7 +390,7 @@ try {
 }
 ```
 
-Ở sử dụng method `ClassReader.accept()` để quan sát từng class với `ClassVisitor` được truyền vào, ở đây `ClassVisitor` được truyền vào chính là `MethodDiscoveryClassVisitor`.
+Sử dụng method `ClassReader.accept()` để quan sát từng class với `ClassVisitor` được truyền vào, ở đây `ClassVisitor` được truyền vào chính là `MethodDiscoveryClassVisitor`.
 
 Code được triển khai của class `MethodDiscoveryClassVisitor` cũng nằm trong class `MethodDiscovery`:
 
@@ -492,8 +493,7 @@ Ta thấy khi `MethodDiscoveryClassVisitor.visit()` được thực thi thì nó
 Tiếp theo ta phân tích `MethodDiscoveryClassVisitor.visitField()`, đây là method được thực thi ngay sau `MethodDiscoveryClassVisitor.visit()`. Xem lại triển khai của `MethodDiscoveryClassVisitor.visitField()`:
 
 ```java
-public FieldVisitor visitField(int access, String name, String desc,
-                                String signature, Object value) {
+public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
     if ((access & Opcodes.ACC_STATIC) == 0) {
         Type type = Type.getType(desc);
         String typeName;
