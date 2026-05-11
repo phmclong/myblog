@@ -1,9 +1,9 @@
 ---
-title: JavaScript Security - Prototype Pollution Attack
+title: JS Security - Prototype Pollution Attack
 date: 2022-02-13 17:18:07
-tags: [Javascript Security, Security, Javascript Prototype Pollution]
+tags: [JS, JS Prototype Pollution]
 categories:
-  - Javascript 
+  - JS
 ---
 
 # Lời nói đầu

@@ -1,9 +1,9 @@
 ---
 title: ImaginaryCTF 2022 - Web Category - Login Please (Write up)
 date: 2022-09-18 02:21:02
-tags: [Javascript Security, Security, CTF, Javascript Prototype Pollution]
+tags: [JS Security, CTF, JS Prototype Pollution]
 categories:
-  - Javascript
+  - JS
 ---
 
 # Introduction

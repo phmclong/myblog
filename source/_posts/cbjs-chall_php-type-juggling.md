@@ -1,9 +1,9 @@
 ---
 title: CBJS Challenge - PHP TYPE JUGGLING (Write up)
 date: 2022-03-27 02:21:02
-tags: [PHP Security, Security, CTF, PHP Type Juggling]
+tags: [PHP Security, CTF, PHP Type Juggling]
 categories:
-  - PHP 
+  - PHP
 ---
 
 Thật ra bài này đã có người khác viết write up rất hoàn chỉnh rồi. Mình viết dưới phương diện của người mới tiếp cận bảo mật, nhất là khi tiếp cận 1 bài CTF được đố bằng 1 ngôn ngữ mà mình chẳng hề quen thuộc. Bởi vì do quá thiếu kinh nghiệm nên khi giải bài mà mình gặp rất nhiều trắc trở, mình viết bởi vì mình muốn rút kinh nghiệm cho bản thân. Hi vọng ai đọc được sẽ góp ý giúp mình.

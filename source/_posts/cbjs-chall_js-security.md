@@ -1,9 +1,9 @@
 ---
-title: CBJS Challenge - JAVASCRIPT SECURITY (Write up)
+title: CBJS Challenge - JS SECURITY (Write up)
 date: 2022-05-29 02:21:02
-tags: [Javascript Security, Security, CTF, Javascript Type Coercion]
+tags: [JS Security, CTF, JS Type Coercion]
 categories:
-  - Javascript
+  - JS
 ---
 
 > Sau bao nhiêu thử thách PHP của CBJS, mình cũng đã được làm 1 thử thách về JavaScript - ngôn ngữ mình quen thuộc.

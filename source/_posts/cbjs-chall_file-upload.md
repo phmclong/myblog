@@ -1,7 +1,7 @@
 ---
 title: CBJS Challenge - FILE UPLOAD WORKSHOP 📁 (Write up)
 date: 2022-05-14 02:21:02
-tags: [PHP Security, Security, CTF, File Upload Vulnerability]
+tags: [PHP Security, CTF, File Upload Vulnerability]
 categories:
   - PHP
 ---
