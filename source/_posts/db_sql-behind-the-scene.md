@@ -1,6 +1,6 @@
 ---
 title: Phân tích Database - SQL thật sự lưu dữ liệu như thế nào ?
-date: 2025-23-05 16:00:00
+date: 2025-05-23 16:00:00
 tags: [Database, Technology Curiousity]
 categories:
   - Database

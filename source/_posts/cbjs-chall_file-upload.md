@@ -6,6 +6,8 @@ categories:
   - PHP
 ---
 
+# Lời nói đầu
+
 Thử thách lần này là về lỗ hổng File Upload, được xây dựng bởi team CyberJutsu, nó bao gồm tất cả 9 levels mà theo mình thấy thì được sắp xếp từ dễ cho đến khó, ban đầu thì đơn giản nhưng càng về sau thì bạn càng phải xâu chuỗi những kiến thức mà bạn có được thì mới giải được nó.
 
 Để nắm được sơ qua khái niệm về lỗ hổng File Upload thì team CyberJutsu đã làm 2 video giới thiệu về lỗ hổng này:
