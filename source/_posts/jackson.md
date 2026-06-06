@@ -1,5 +1,9 @@
-![alt text](image.png)
+---
+title: Java Security - Jackson
+date: 2025-06-06 14:55:00
+tags: [Java Security, Java Deserialization]
+categories:
+  - Java
+---
 
-![alt text](image-1.png)
-
-![alt text](image-2.png)
+TODO

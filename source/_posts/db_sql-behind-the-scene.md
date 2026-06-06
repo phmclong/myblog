@@ -39,7 +39,265 @@ Ta nhìn thấy dữ liệu dạng:
 
 Đây là cách database trình bày dữ liệu cho con người. Nhưng trên ổ đĩa, nó không lưu y nguyên thành bảng đẹp như vậy.
 
-## 2. Physic layer: file, page/block, record
+# 1. Table không phải là một “file bảng” đơn giản
+
+Khi bạn tạo bảng:
+
+```sql
+CREATE TABLE users (
+  id INT,
+  name VARCHAR(100),
+  age INT
+);
+```
+
+Bạn nhìn thấy:
+
+|  id | name | age |
+| --: | ---- | --: |
+|   1 | Long |  25 |
+|   2 | Nam  |  30 |
+
+Nhưng database engine không lưu kiểu:
+
+```text
+id,name,age
+1,Long,25
+2,Nam,30
+```
+
+Trừ khi đó là file CSV. Còn database như MySQL InnoDB, Oracle, PostgreSQL… thường lưu theo cấu trúc nhị phân có tổ chức.
+
+Có thể hình dung:
+
+```text
+Table users
+  ↓
+Datafile / tablespace file
+  ↓
+Page / block
+  ↓
+Record / row
+  ↓
+Column values dưới dạng bytes
+```
+
+---
+
+# 2. Datafile là gì?
+
+Database cần một nơi vật lý để lưu dữ liệu trên ổ cứng/SSD.
+
+Với MySQL InnoDB, nếu dùng `innodb_file_per_table`, mỗi bảng có thể có file riêng:
+
+```text
+users.ibd
+orders.ibd
+products.ibd
+```
+
+Với Oracle, dữ liệu nằm trong các datafile:
+
+```text
+users01.dbf
+system01.dbf
+app_data01.dbf
+```
+
+Nhưng datafile này **không phải text file**. Bạn mở bằng Notepad sẽ không đọc được bình thường, vì bên trong là dữ liệu nhị phân.
+
+Ví dụ tưởng tượng file `users.ibd`:
+
+```text
+users.ibd
++------------------------------------------------+
+| Page 0 | Page 1 | Page 2 | Page 3 | Page 4 ... |
++------------------------------------------------+
+```
+
+Database không xử lý từng byte rời rạc một cách tùy tiện. Nó chia file thành các đơn vị lớn hơn gọi là **page** hoặc **block**.
+
+---
+
+# 3. Page/block là gì?
+
+**Page/block là đơn vị đọc/ghi cơ bản của database.**
+
+Ví dụ MySQL InnoDB thường dùng page 16 KB.
+
+Nghĩa là khi cần đọc một dòng dữ liệu, database thường không chỉ đọc đúng vài chục byte của dòng đó. Nó đọc cả page chứa dòng đó vào memory.
+
+Ví dụ:
+
+```text
+Page size = 16 KB
+
+Page 100
++------------------------------------------------+
+| Page header                                    |
+| Record 1                                      |
+| Record 2                                      |
+| Record 3                                      |
+| Free space                                    |
+| Page directory / slot info                    |
+| Page trailer                                  |
++------------------------------------------------+
+```
+
+Một page không chỉ chứa data row. Nó còn chứa metadata để database quản lý page đó.
+
+Một page có thể gồm:
+
+```text
+Page
+ ├── Header: thông tin quản lý page
+ ├── Records: các row thật
+ ├── Free space: vùng trống để insert/update thêm
+ ├── Directory/slot: vị trí các record trong page
+ └── Trailer/checksum: kiểm tra lỗi, tính toàn vẹn
+```
+
+Nói dễ hiểu: **page giống như một trang trong cuốn sổ**, mỗi trang chứa nhiều dòng ghi chép, nhưng trên trang đó còn có số trang, đánh dấu, phần trống, thông tin kiểm tra.
+
+---
+
+# 4. Vì sao phải chia thành page/block?
+
+Vì ổ đĩa và memory hoạt động hiệu quả hơn khi đọc/ghi theo block lớn.
+
+Nếu mỗi lần query database phải đọc từng byte nhỏ lẻ thì rất chậm.
+
+Thay vào đó:
+
+```text
+Disk → đọc một page 16 KB → đưa vào RAM → xử lý nhiều record trong page đó
+```
+
+Ví dụ bạn query:
+
+```sql
+SELECT * FROM users WHERE id = 2;
+```
+
+Nếu dòng `id = 2` nằm trong Page 100, database sẽ đọc Page 100 vào memory.
+
+```text
+Disk
+ └── Page 100
+      ├── id=1
+      ├── id=2
+      └── id=3
+```
+
+Dù bạn chỉ cần `id=2`, database vẫn thường đọc cả page chứa nó.
+
+Đây là lý do database rất quan tâm đến:
+
+```text
+Page size
+Buffer pool/cache
+Index
+Data locality
+Fragmentation
+```
+
+---
+
+# 5. Record/row nằm trong page như thế nào?
+
+Giả sử page có 16 KB.
+
+Một record nhỏ có thể chỉ vài chục bytes.
+
+Ví dụ bảng:
+
+```sql
+CREATE TABLE users (
+  id INT,
+  name VARCHAR(100),
+  age INT
+);
+```
+
+Dòng:
+
+```text
+id = 1
+name = 'Long'
+age = 25
+```
+
+Có thể được lưu đại khái như sau:
+
+```text
+Record
++----------------+------------+----------------+-------------+------------+
+| Record Header  | id bytes   | name length    | name bytes  | age bytes  |
++----------------+------------+----------------+-------------+------------+
+```
+
+Tức là:
+
+```text
+[header][id][name_length][name_data][age]
+```
+
+Trong đó:
+
+```text
+header      → metadata của record
+id          → giá trị id đã encode thành bytes
+name_length → độ dài chuỗi name
+name_data   → nội dung chữ Long
+age         → giá trị age đã encode thành bytes
+```
+
+---
+
+# 6. Record header chứa gì?
+
+Record header là phần database dùng để quản lý row.
+
+Nó có thể chứa các thông tin kiểu như:
+
+```text
+- Record này còn sống hay đã bị đánh dấu xóa?
+- Record này dài bao nhiêu?
+- Có NULL column không?
+- Có field nào là variable-length không?
+- Version/transaction information
+- Con trỏ/liên kết tới record khác
+```
+
+Ví dụ rất đơn giản:
+
+```text
+Record header
+ ├── delete flag
+ ├── record length
+ ├── null bitmap
+ ├── variable column offset
+ └── transaction metadata
+```
+
+Bạn có thể hiểu: **row không chỉ gồm dữ liệu bạn nhập, mà còn có dữ liệu phụ để database quản lý giao dịch, xóa, update, rollback, concurrency.**
+
+Ví dụ bạn thấy:
+
+```text
+id=1, name=Long, age=25
+```
+
+Nhưng database có thể lưu thêm:
+
+```text
+row này được tạo bởi transaction nào
+row này đã bị xóa logic chưa
+row này có version cũ không
+field nào đang NULL
+```
+
+## 2.2. Physic layer: file, page/block, record
 
 Database lưu dữ liệu trong các **file dữ liệu**.
 
@@ -430,264 +688,6 @@ Một câu dễ nhớ:
 Đúng rồi, đoạn này là **phần cốt lõi nhất** để hiểu database lưu dữ liệu thật sự như thế nào. Mình phân tích kỹ hơn theo hướng “từ bảng logic xuống bytes trên disk”.
 
 ---
-
-# 1. Table không phải là một “file bảng” đơn giản
-
-Khi bạn tạo bảng:
-
-```sql
-CREATE TABLE users (
-  id INT,
-  name VARCHAR(100),
-  age INT
-);
-```
-
-Bạn nhìn thấy:
-
-|  id | name | age |
-| --: | ---- | --: |
-|   1 | Long |  25 |
-|   2 | Nam  |  30 |
-
-Nhưng database engine không lưu kiểu:
-
-```text
-id,name,age
-1,Long,25
-2,Nam,30
-```
-
-Trừ khi đó là file CSV. Còn database như MySQL InnoDB, Oracle, PostgreSQL… thường lưu theo cấu trúc nhị phân có tổ chức.
-
-Có thể hình dung:
-
-```text
-Table users
-  ↓
-Datafile / tablespace file
-  ↓
-Page / block
-  ↓
-Record / row
-  ↓
-Column values dưới dạng bytes
-```
-
----
-
-# 2. Datafile là gì?
-
-Database cần một nơi vật lý để lưu dữ liệu trên ổ cứng/SSD.
-
-Với MySQL InnoDB, nếu dùng `innodb_file_per_table`, mỗi bảng có thể có file riêng:
-
-```text
-users.ibd
-orders.ibd
-products.ibd
-```
-
-Với Oracle, dữ liệu nằm trong các datafile:
-
-```text
-users01.dbf
-system01.dbf
-app_data01.dbf
-```
-
-Nhưng datafile này **không phải text file**. Bạn mở bằng Notepad sẽ không đọc được bình thường, vì bên trong là dữ liệu nhị phân.
-
-Ví dụ tưởng tượng file `users.ibd`:
-
-```text
-users.ibd
-+------------------------------------------------+
-| Page 0 | Page 1 | Page 2 | Page 3 | Page 4 ... |
-+------------------------------------------------+
-```
-
-Database không xử lý từng byte rời rạc một cách tùy tiện. Nó chia file thành các đơn vị lớn hơn gọi là **page** hoặc **block**.
-
----
-
-# 3. Page/block là gì?
-
-**Page/block là đơn vị đọc/ghi cơ bản của database.**
-
-Ví dụ MySQL InnoDB thường dùng page 16 KB.
-
-Nghĩa là khi cần đọc một dòng dữ liệu, database thường không chỉ đọc đúng vài chục byte của dòng đó. Nó đọc cả page chứa dòng đó vào memory.
-
-Ví dụ:
-
-```text
-Page size = 16 KB
-
-Page 100
-+------------------------------------------------+
-| Page header                                    |
-| Record 1                                      |
-| Record 2                                      |
-| Record 3                                      |
-| Free space                                    |
-| Page directory / slot info                    |
-| Page trailer                                  |
-+------------------------------------------------+
-```
-
-Một page không chỉ chứa data row. Nó còn chứa metadata để database quản lý page đó.
-
-Một page có thể gồm:
-
-```text
-Page
- ├── Header: thông tin quản lý page
- ├── Records: các row thật
- ├── Free space: vùng trống để insert/update thêm
- ├── Directory/slot: vị trí các record trong page
- └── Trailer/checksum: kiểm tra lỗi, tính toàn vẹn
-```
-
-Nói dễ hiểu: **page giống như một trang trong cuốn sổ**, mỗi trang chứa nhiều dòng ghi chép, nhưng trên trang đó còn có số trang, đánh dấu, phần trống, thông tin kiểm tra.
-
----
-
-# 4. Vì sao phải chia thành page/block?
-
-Vì ổ đĩa và memory hoạt động hiệu quả hơn khi đọc/ghi theo block lớn.
-
-Nếu mỗi lần query database phải đọc từng byte nhỏ lẻ thì rất chậm.
-
-Thay vào đó:
-
-```text
-Disk → đọc một page 16 KB → đưa vào RAM → xử lý nhiều record trong page đó
-```
-
-Ví dụ bạn query:
-
-```sql
-SELECT * FROM users WHERE id = 2;
-```
-
-Nếu dòng `id = 2` nằm trong Page 100, database sẽ đọc Page 100 vào memory.
-
-```text
-Disk
- └── Page 100
-      ├── id=1
-      ├── id=2
-      └── id=3
-```
-
-Dù bạn chỉ cần `id=2`, database vẫn thường đọc cả page chứa nó.
-
-Đây là lý do database rất quan tâm đến:
-
-```text
-Page size
-Buffer pool/cache
-Index
-Data locality
-Fragmentation
-```
-
----
-
-# 5. Record/row nằm trong page như thế nào?
-
-Giả sử page có 16 KB.
-
-Một record nhỏ có thể chỉ vài chục bytes.
-
-Ví dụ bảng:
-
-```sql
-CREATE TABLE users (
-  id INT,
-  name VARCHAR(100),
-  age INT
-);
-```
-
-Dòng:
-
-```text
-id = 1
-name = 'Long'
-age = 25
-```
-
-Có thể được lưu đại khái như sau:
-
-```text
-Record
-+----------------+------------+----------------+-------------+------------+
-| Record Header  | id bytes   | name length    | name bytes  | age bytes  |
-+----------------+------------+----------------+-------------+------------+
-```
-
-Tức là:
-
-```text
-[header][id][name_length][name_data][age]
-```
-
-Trong đó:
-
-```text
-header      → metadata của record
-id          → giá trị id đã encode thành bytes
-name_length → độ dài chuỗi name
-name_data   → nội dung chữ Long
-age         → giá trị age đã encode thành bytes
-```
-
----
-
-# 6. Record header chứa gì?
-
-Record header là phần database dùng để quản lý row.
-
-Nó có thể chứa các thông tin kiểu như:
-
-```text
-- Record này còn sống hay đã bị đánh dấu xóa?
-- Record này dài bao nhiêu?
-- Có NULL column không?
-- Có field nào là variable-length không?
-- Version/transaction information
-- Con trỏ/liên kết tới record khác
-```
-
-Ví dụ rất đơn giản:
-
-```text
-Record header
- ├── delete flag
- ├── record length
- ├── null bitmap
- ├── variable column offset
- └── transaction metadata
-```
-
-Bạn có thể hiểu: **row không chỉ gồm dữ liệu bạn nhập, mà còn có dữ liệu phụ để database quản lý giao dịch, xóa, update, rollback, concurrency.**
-
-Ví dụ bạn thấy:
-
-```text
-id=1, name=Long, age=25
-```
-
-Nhưng database có thể lưu thêm:
-
-```text
-row này được tạo bởi transaction nào
-row này đã bị xóa logic chưa
-row này có version cũ không
-field nào đang NULL
-```
 
 ---
 
