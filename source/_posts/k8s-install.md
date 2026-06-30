@@ -14,7 +14,7 @@ Tôi ko triển khai ở quy mô lớn nên ko dùng `kubespray` hay `ansible`.
 
 # II. Tổng quan kiến trúc
 
-> Hệ điều hành: 3 máy đề sử dụng RHEL 9.x
+> Hệ điều hành: 3 máy đều sử dụng RHEL 9.x
 > Kubernetes: v1.36.  
 > Runtime: containerd.  
 > CNI: Cilium, VXLAN.  
@@ -74,11 +74,11 @@ free -h
 
 `swapon --show` không trả kết quả là đúng.
 
-> Nếu `dnf update` vừa nâng kernel, reboot node trước khi đi tiếp:
->
-> ```bash
-> sudo reboot
-> ```
+Nếu `dnf update` vừa nâng kernel, reboot node trước khi đi tiếp:
+
+```bash
+sudo reboot
+```
 
 ## 3.3. Hardening với SELinux
 
@@ -374,3 +374,5 @@ helm version
 ```
 
 # VII. Triển khai CNI
+
+# VIII. Triển khai CSI
