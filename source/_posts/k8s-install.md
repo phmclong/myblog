@@ -1,5 +1,5 @@
 ---
-title: Install k8s với kubeadm
+title: k8s install from scratch
 date: 2026-06-28 20:00:00
 tags: [DevOps, k8s]
 categories:
@@ -164,7 +164,7 @@ Kiểm tra thấy `net.ipv4.ip_forward = 1` là cấu hình đã nhận, node đ
 
 Ví dụ: Pod A gửi traffic đến Pod B nằm trên node khác. Node phải có khả năng **forward packet** sang interface/network phù hợp. Nếu `ip_forward = 0`, traffic có thể bị chặn ngay tại node.
 
-# IV. Cài container runtime
+# IV. Triển khai CRI
 
 Sử dụng **containerd** làm **container runtime**. Tiến hành cài đặt **containerd** trên cả 3 node.
 
@@ -271,7 +271,7 @@ kubectl version --client
 crictl version
 ```
 
-# VI. Set up Controlplane
+# VI. Bootstrap Controlplane
 
 ## 6.1. Khởi tạo Control Plane
 
@@ -374,5 +374,56 @@ helm version
 ```
 
 # VII. Triển khai CNI
+
+## 7.1. Mô hình IP cần thống nhất trước khi thao tác
+
+Trong lịch sử cấu hình, các IP được sử dụng như sau:
+
+Control plane 1:        10.16.61.30
+Control plane 2:        10.16.61.31
+Control plane 3:        10.16.61.32
+
+API VIP HAProxy:        10.16.61.62
+API VIP port:           16443
+
+Ingress LoadBalancer:   10.16.61.63
+
+Mạng quản trị SSH:      10.2.15.0/24
+Network interface:      ens33
+
+## 7.1. Mục tiêu
+
+Triển khai HAProxy Ingress Controller trong Kubernetes để publish các ứng dụng ra mạng bên ngoài qua HTTP/HTTPS.
+
+Thông tin sử dụng trong tutorial:
+
+| Thành phần                             | Giá trị                                     |
+| -------------------------------------- | ------------------------------------------- |
+| Kubernetes API VIP                     | `10.16.61.62:16443`                         |
+| HAProxy Ingress LoadBalancer VIP       | `10.16.61.63`                               |
+| Control-plane nodes                    | `10.16.61.30`, `10.16.61.31`, `10.16.61.32` |
+| Mạng quản trị SSH                      | `10.2.15.0/24`                              |
+| Network interface dùng để announce VIP | `ens33`                                     |
+| Ingress Class                          | `haproxy`                                   |
+| Namespace triển khai                   | `haproxy-ingress`                           |
+
+Luồng truy cập:
+
+```text
+Client
+  |
+  | HTTP/HTTPS
+  v
+VIP 10.16.61.63
+  |
+  v
+Cilium L2 Announcement
+  |
+  v
+HAProxy Ingress Controller
+  |
+  v
+Ingress -> Kubernetes Service -> Pod ứng dụng
+```
 
 # VIII. Triển khai CSI
