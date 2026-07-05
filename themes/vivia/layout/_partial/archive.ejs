@@ -62,3 +62,23 @@
       </a>
     <% }) %>
   </div>
+  <% if (page.total > 1) { %>
+    <%
+      let prevUrl = page.prev_link ? url_for(page.prev_link) : '#';
+      let nextUrl = page.next_link ? url_for(page.next_link) : '#';
+    %>
+    <nav id="page-nav">
+      <a id="prev-btn" class="page-nav-btn <% if (page.current == 1) { %>disabled<% } %>" href="<%- prevUrl %>">
+        <i class="fa-solid fa-angle-left"></i>
+      </a>
+      <div id="num-bar">
+        <%- paginator({
+          escape: false,
+          prev_next: false
+        }) %>
+      </div>
+      <a id="next-btn" class="page-nav-btn <% if (page.current == page.total) { %>disabled<% } %>" href="<%- nextUrl %>">
+        <i class="fa-solid fa-angle-right"></i>
+      </a>
+    </nav>
+  <% } %>

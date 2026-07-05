@@ -379,17 +379,17 @@ helm version
 
 Trong lịch sử cấu hình, các IP được sử dụng như sau:
 
-Control plane 1:        10.16.61.30
-Control plane 2:        10.16.61.31
-Control plane 3:        10.16.61.32
+Control plane 1: 10.0.1.1
+Worker 1: 10.0.1.2
+Worker 2: 10.0.1.3
 
-API VIP HAProxy:        10.16.61.62
-API VIP port:           16443
+API VIP HAProxy: 10.16.61.62
+API VIP port: 16443
 
-Ingress LoadBalancer:   10.16.61.63
+Ingress LoadBalancer: 10.16.61.63
 
-Mạng quản trị SSH:      10.2.15.0/24
-Network interface:      ens33
+Mạng quản trị SSH: 10.2.15.0/24
+Network interface: ens33
 
 ## 7.1. Mục tiêu
 
