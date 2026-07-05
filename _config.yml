@@ -6,8 +6,8 @@ author: Sheon
 language: en
 timezone: ""
 
-url: http://phmclong.github.io/
-root: /
+url: http://phmclong.github.io/myblog
+root: /myblog/
 permalink: ":year/:month/:day/:title/"
 permalink_defaults: null
 pretty_urls:
