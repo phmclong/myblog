@@ -1,7 +1,7 @@
 ---
-title: Java Security - Java Bytecode (ASM Framework)
+title: Java Sec - Java Bytecode (ASM Framework)
 date: 2023-11-02 2:18:07
-tags: [Java Security, Static Analysis]
+tags: [Java Sec, Static Analysis]
 categories:
   - Java
 ---
