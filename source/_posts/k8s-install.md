@@ -375,6 +375,52 @@ helm version
 
 # VII. Triển khai CNI
 
+## 7.1. Mở firewall cho VXLAN giữa các node:
+```bash
+sudo firewall-cmd --permanent --add-port=8472/udp
+sudo firewall-cmd --permanent --add-port=4240/tcp
+sudo firewall-cmd --reload
+```
+
+Trong đó: 
+- 8472/UDP: bắt buộc cho VXLAN tunnel.
+- 4240/TCP: phục vụ Cilium health check, nên mở giữa các node.
+
+Cài Cilium bằng Helm
+Ví dụ chọn Pod CIDR là 10.244.0.0/16, mỗi node nhận một subnet /24 tương đương tối đa khoảng 254 IP Pod/node:
+
+```bash
+helm upgrade --install cilium oci://quay.io/cilium/charts/cilium \
+  --version 1.19.5 \
+  --namespace kube-system \
+  --set routingMode=tunnel \
+  --set tunnelProtocol=vxlan \
+  --set ipam.mode=cluster-pool \
+  --set ipam.operator.clusterPoolIPv4PodCIDRList="{10.244.0.0/16}" \
+  --set ipam.operator.clusterPoolIPv4MaskSize=24 \
+  --set kubeProxyReplacement=false
+```
+
+Ý nghĩa chính:
+- `routingMode=tunnel`: chạy overlay network.
+- `tunnelProtocol=vxlan`: đóng gói traffic Pod-to-Pod qua UDP 8472.
+- `cluster-pool`: Cilium Operator tự cấp Pod CIDR cho từng node.
+- `10.244.0.0/16`: dải IP dành cho Pod; không được trùng Node subnet, Service CIDR, VPN, LAN hoặc hệ thống khác.
+- `kubeProxyReplacement=false`: giữ kube-proxy, phù hợp để triển khai ban đầu ổn định hơn.
+
+```bash
+helm upgrade cilium oci://quay.io/cilium/charts/cilium  \
+  --version 1.19.5 \
+  --namespace kube-system \
+  --reuse-values \
+  --set kubeProxyReplacement=true \
+  --set l2announcements.enabled=true \
+  --set-string k8sServiceHost=10.16.61.30 \
+  --set-string k8sServicePort=6443 \
+  --set k8sClientRateLimit.qps=50 \
+  --set k8sClientRateLimit.burst=100
+```
+
 ## 7.1. Mô hình IP cần thống nhất trước khi thao tác
 
 Trong lịch sử cấu hình, các IP được sử dụng như sau:
