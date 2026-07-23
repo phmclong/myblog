@@ -149,4 +149,4 @@ Bên trong hàm `resolveClass`, chương trình lấy **fully qualified class na
 
 Vì vậy, khi **override** phương thức `resolveClass`, chúng ta có thể thêm một **blacklist** chứa tên các class không được phép sử dụng. Nếu phát hiện class đang được xử lý nằm trong blacklist, chương trình sẽ ném ra một **exception**.
 
-Bằng cách này, chúng ta có thể ngăn chặn các cuộc tấn công **Deserialization Attack** ở một mức độ nhất định.
+Qua đó ta có thể ngăn chặn các cuộc tấn công **Deserialization Attack** ở một mức độ nhất định.
