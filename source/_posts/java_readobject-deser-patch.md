@@ -17,6 +17,7 @@ Có thể tạm thời bỏ qua lần gọi `readObject` đầu tiên; phần n�
 Tạo 2 class để debug quá trình deserialization
 
 Class `User`:
+
 ```java
 package org.example;
 
@@ -61,6 +62,7 @@ public class User implements Serializable {
 ```
 
 Class `ReadObjectAnalysis`:
+
 ```java
 package org.example;
 
@@ -80,6 +82,7 @@ public class ReadObjectAnalysis {
 ```
 
 # II. Phân tích method `readObject`
+
 Sau khi chuẩn bị. Ta đi đến quá trình phân tích.
 
 Đặt breakpoint tại method `ObjectInputStream.readObject()`, rồi chạy class `ReadObjectAnalysis` để debug.
@@ -96,7 +99,8 @@ Ta tiếp tục follow vào bên trong phương thức `readObject0` để xem c
 bin.readByte();
 handleReset();
 ```
-Kiểm tra giá trị của `TC_RESET.
+
+Kiểm tra giá trị của `TC_RESET`.
 {% asset_img image-7.png %}
 
 Sau khi chuyển sang kiểu `Byte`, giá trị này là `121`. Trong khi đó, byte đầu tiên trong dữ liệu serialized của chúng ta là `115`, nên đoạn xử lý này sẽ bị bỏ qua.
@@ -115,9 +119,11 @@ Trong phương thức này, nó lại gọi `resolveClass` và truyền vào tha
 {% asset_img image-14.png %}
 
 Tại đây, phương thức trả về:
+
 ```java
 Class.forName(name, false, latestUserDefinedLoader());
 ```
+
 Phương thức `latestUserDefinedLoader()` trả về `sun.misc.VM.latestUserDefinedLoader()`. Điều này cho thấy class loader được chỉ định tại đây.
 {% asset_img image-15.png %}
 Sau đó quay lại phương thức `readOrdinaryObject` để tiếp tục phân tích.
