@@ -3,7 +3,7 @@ title: Những suy nghĩ của một học sinh cấp 3 chơi CTF trong thời �
 date: 2026-09-10 00:40:00
 tags: [AI, Thought]
 categories:
-  - Thoughts
+  - AI Slop
 ---
 
 # Lời nói đầu
